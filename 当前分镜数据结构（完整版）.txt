@@ -1,0 +1,80 @@
+🎯 当前分镜数据结构（完整版）
+{
+  "scenes": [
+    {
+      "episode": "1",
+      "scene_number": "1",
+      "title": "废弃车站相遇",
+      "location": "废弃火车站台",
+      "time_of_day": "黄昏",
+      "characters": ["队长", "张扬", "S级丧尸"],
+      "content": "场景一对应的剧本原文片段...",
+      
+      "shots": [
+        {
+          "shot_number": 1,
+          "shot_type": "全景",
+          "camera_movement": "固定",
+          "camera_angle": "平视",
+          "duration": 3,
+          
+          "visual_prompt": {
+            "lighting": "黄昏侧逆光，色温3200K，金色光晕穿过破碎的窗户",
+            "color_palette": "主色60% #E8913A，辅色30% #4A5568，点缀色10% #FF4444",
+            "character_placement": "@队长 站在画面左侧交叉点，身体朝向右侧",
+            "facial_detail": "眉头紧锁，眼神锐利，嘴唇紧抿",
+            "scene_description": "废弃火车站台，生锈的铁轨向远处延伸，破碎的玻璃反射着夕阳",
+            "composition": "三分法构图，人物位于左侧交叉点"
+          },
+          
+          "action_prompt": {
+            "physical_action": "右手紧握手枪枪柄，手指微微扣动扳机",
+            "micro_movement": "喉结缓慢滚动，太阳穴青筋轻微凸起"
+          },
+          
+          "emotion_cue": {
+            "primary_emotion": "紧张",
+            "visual_mapping": "冷峻色调+阴影加深+动态模糊"
+          },
+          
+          "dialogue": "@队长：谁在那里？出来！",
+          "narration": "",
+          "scene_reference": "@废弃车站",
+          "original_text": "队长右手紧握手枪，警惕地环顾四周：\"谁在那里？出来！\"",
+          
+          // v7.0 导演引擎新增字段
+          "emotion": { "type": "紧张", "score": 8 },
+          "climax": { "type": "悬念", "score": 6, "level": "普通" },
+          "retention": { "score": 7, "risk": "low" },
+          "shot": { "type": "全景", "angle": "平视" },
+          "camera": { "movement": "固定", "speed": "normal" },
+          "lighting": { "color": "黄昏侧逆光，色温3200K..." },
+          "sound": { "effect": "" },
+          
+          // 前端兼容字段
+          "description": "废弃火车站台，生锈的铁轨向远处延伸...",
+          "action_description": "右手紧握手枪枪柄，手指微微扣动扳机"
+        }
+      ]
+    }
+  ]
+}
+
+核心字段说明
+层级	关键字段	说明
+场景层	scenes[i]	按剧本场景拆分
+	location	具体地点（生图场景一致性用）
+	time_of_day	日内/夜内/日外/夜外/黄昏/黎明（光影一致性用）
+镜头层	shots[j]	每个场景的镜头列表
+	shot_type	景别：远景/全景/中景/近景/特写/大特写
+	visual_prompt	生图核心：结构化视觉提示词（光影/色彩/构图/角色位置）
+	action_prompt	物理动作+微动作细节
+	dialogue	台词，格式必须 @角色名：台词内容
+	original_text	v7.1.7新增：该镜头对应的剧本原文片段
+
+重点注意
+不是简单的 [{scene, dialogue, shot}] 结构，而是非常深的嵌套结构化JSON
+visual_prompt 是生图核心，不是简单字符串，是包含6个子字段的对象
+dialogue 有强制格式：必须 @角色名：台词内容，不能只有台词
+v7.0后导演引擎会加很多字段（emotion/climax/retention等），是导演规则引擎的输出
+改造时，最好能兼容这个现有结构，不要把数据格式改崩了。
